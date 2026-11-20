@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EISE's Daisy Clicker 🌼</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 15px;
+    font-family: "Trebuchet MS", sans-serif;
+    background: linear-gradient(145deg, #fff9df, #fff0b5, #fff8e6);
+    color: #80612b;
+}
+
+.container {
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 5px;
+    color: #d6a52e;
+    font-size: 30px;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    margin-top: 0;
+    color: #a68b53;
+    font-size: 13px;
+}
+
+.keychain {
+    position: relative;
+    margin: 55px auto 25px;
+    padding: 35px 15px 25px;
+    max-width: 390px;
+    border: 5px solid #f0d68b;
+    border-radius: 35px;
+    background: linear-gradient(145deg, #fffdf2, #fff0bd);
+    box-shadow:
+        0 12px 0 #dfc477,
+        0 18px 25px rgba(151, 117, 42, 0.15),
+        inset 0 3px 8px white;
+}
+
+.keyring {
+    position: absolute;
+    top: -48px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 55px;
+    height: 55px;
+    border: 7px solid #d9d9d9;
+    border-radius: 50%;
+    box-shadow: inset 0 2px 5px white, 0 2px 5px #b4a56f;
+}
+
+.keyring::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 18px;
+    background: #d9d9d9;
+    left: 50%;
+    bottom: -20px;
+    transform: translateX(-50%);
+    border-radius: 4px;
+}
+
+.decorations {
+    position: absolute;
+    top: -20px;
+    left: 17px;
+    right: 17px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.hairpin {
+    width: 42px;
+    height: 9px;
+    border-radius: 20px;
+    transform: rotate(-20deg);
+    background: linear-gradient(90deg, #f5bd4f, #ffe8a3);
+    box-shadow: 0 2px 3px #d9bd76;
+}
+
+.hairpin::after {
+    content: "♡";
+    position: absolute;
+    right: 4px;
+    top: -10px;
+    font-size: 13px;
+    color: #fff;
+}
+
+.hairpin.second {
+    transform: rotate(20deg);
+    background: linear-gradient(90deg, #fff, #f5d77e);
+}
+
+.label {
+    margin: 4px 0 18px;
+    color: #c69a36;
+    font-size: 12px;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 9px;
+}
+
+.key {
+    aspect-ratio: 1;
+    border: none;
+    border-radius: 19px;
+    cursor: pointer;
+    font-size: 25px;
+    font-weight: bold;
+    color: #87652a;
+    background: linear-gradient(145deg, #fff8d9, #f3d77e);
+    box-shadow:
+        0 7px 0 #d8b75e,
+        0 9px 12px rgba(134, 102, 39, 0.15),
+        inset 0 3px 5px white;
+    transition: transform 0.08s, box-shadow 0.08s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.key:nth-child(2) {
+    background: linear-gradient(145deg, #fffdf0, #f8e6a9);
+}
+
+.key:nth-child(3) {
+    background: linear-gradient(145deg, #fff4c5, #f1d47b);
+}
+
+.key:nth-child(4) {
+    background: linear-gradient(145deg, #fff9e2, #edcc69);
+}
+
+.key.daisy {
+    color: #d6a52e;
+    background: linear-gradient(145deg, #fffefa, #fff0bd);
+    font-size: 30px;
+}
+
+.key:active,
+.key.pressed {
+    transform: translateY(6px);
+    box-shadow:
+        0 1px 0 #d8b75e,
+        inset 0 3px 7px rgba(150, 111, 35, 0.15);
+}
+
+.counters {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.counter {
+    padding: 9px 2px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid #f4dfaa;
+}
+
+.counter .letter {
+    font-size: 11px;
+    color: #b69a5b;
+    font-weight: bold;
+}
+
+.counter .number {
+    display: block;
+    margin-top: 4px;
+    font-size: 17px;
+    color: #a47a2e;
+    font-weight: bold;
+}
+
+.total {
+    margin: 22px 0 15px;
+    color: #9e7b3d;
+    font-size: 14px;
+}
+
+.total strong {
+    color: #d6a52e;
+    font-size: 23px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.control {
+    border: 1px solid #e9d18f;
+    border-radius: 20px;
+    padding: 9px 16px;
+    background: #fffdf4;
+    color: #9c793b;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.message {
+    min-height: 25px;
+    margin-top: 18px;
+    color: #c69a36;
+    font-size: 13px;
+    font-style: italic;
+}
+
+.footer {
+    margin-top: 22px;
+    font-size: 11px;
+    color: #bba16c;
+}
+
+.sparkle {
+    position: fixed;
+    pointer-events: none;
+    font-size: 17px;
+    animation: floatUp 0.8s ease-out forwards;
+}
+
+@keyframes floatUp {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(0.7);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-55px) scale(1.4);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>EISE 🌼</h1>
+    <p class="subtitle">a little pocket of sunshine</p>
+
+    <div class="keychain">
+
+        <div class="keyring"></div>
+
+        <div class="decorations">
+            <div class="hairpin"></div>
+            <div class="hairpin second"></div>
+        </div>
+
+        <div class="label">✦ EISE'S LITTLE CLICKER ✦</div>
+
+        <div class="buttons">
+            <button class="key" onclick="clickButton('E', this)">E</button>
+            <button class="key" onclick="clickButton('I', this)">I</button>
+            <button class="key" onclick="clickButton('S', this)">S</button>
+            <button class="key" onclick="clickButton('E2', this)">E</button>
+        </div>
+
+        <div style="margin-top: 12px;">
+            <button class="key daisy"
+                style="width: 62px; height: 62px;"
+                onclick="clickButton('🌼', this)">🌼</button>
+        </div>
+
+        <div class="counters">
+            <div class="counter">
+                <span class="letter">E</span>
+                <span class="number" id="count-E">0</span>
+            </div>
+            <div class="counter">
+                <span class="letter">I</span>
+                <span class="number" id="count-I">0</span>
+            </div>
+            <div class="counter">
+                <span class="letter">S</span>
+                <span class="number" id="count-S">0</span>
+            </div>
+            <div class="counter">
+                <span class="letter">E</span>
+                <span class="number" id="count-E2">0</span>
+            </div>
+            <div class="counter">
+                <span class="letter">🌼</span>
+                <span class="number" id="count-🌼">0</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="total">
+        TOTAL CLICKS<br>
+        <strong id="total">0</strong>
+    </div>
+
+    <div class="controls">
+        <button class="control" id="soundToggle" onclick="toggleSound()">
+            🔊 Sound ON
+        </button>
+        <button class="control" onclick="resetCounters()">
+            ↻ Reset
+        </button>
+    </div>
+
+    <div class="message" id="message">
+        press a button and enjoy the little clicks ♡
+    </div>
+
+    <div class="footer">
+        made with a little sunshine just for Eise ☀️
+    </div>
+
+</div>
+
+<script>
+const counts = {
+    E: 0,
+    I: 0,
+    S: 0,
+    E2: 0,
+    "🌼": 0
+};
+
+let total = 0;
+let soundEnabled = true;
+let audioContext;
+
+const messages = [
+    "a little click of happiness ♡",
+    "you're sunshine in a little package ☀️",
+    "one daisy for you 🌼",
+    "keep blooming, little flower!",
+    "just a little something for you ♡",
+    "pretty things for a pretty soul",
+    "click, click, sunshine!",
+    "hope this makes you smile 🌼"
+];
+
+function playMechanicalClick() {
+    if (!soundEnabled) return;
+
+    try {
+        if (!audioContext) {
+            audioContext = new (
+                window.AudioContext || window.webkitAudioContext
+            )();
+        }
+
+        if (audioContext.state === "suspended") {
+            audioContext.resume();
+        }
+
+        function makeClick(time, volume, frequency) {
+            const duration = 0.045;
+            const bufferSize = audioContext.sampleRate * duration;
+            const buffer = audioContext.createBuffer(
+                1, bufferSize, audioContext.sampleRate
+            );
+
+            const data = buffer.getChannelData(0);
+
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) *
+                    Math.pow(1 - i / bufferSize, 3);
+            }
+
+            const noise = audioContext.createBufferSource();
+            noise.buffer = buffer;
+
+            const filter = audioContext.createBiquadFilter();
+            filter.type = "highpass";
+            filter.frequency.value = 1800;
+
+            const noiseGain = audioContext.createGain();
+            noiseGain.gain.setValueAtTime(volume, time);
+            noiseGain.gain.exponentialRampToValueAtTime(
+                0.001, time + duration
+            );
+
+            noise.connect(filter);
+            filter.connect(noiseGain);
+            noiseGain.connect(audioContext.destination);
+
+            noise.start(time);
+            noise.stop(time + duration);
+
+            const oscillator = audioContext.createOscillator();
+            const oscGain = audioContext.createGain();
+
+            oscillator.type = "triangle";
+            oscillator.frequency.setValueAtTime(frequency, time);
+            oscillator.frequency.exponentialRampToValueAtTime(
+                frequency * 0.45, time + 0.035
+            );
+
+            oscGain.gain.setValueAtTime(volume * 0.7, time);
+            oscGain.gain.exponentialRampToValueAtTime(
+                0.001, time + 0.04
+            );
+
+            oscillator.connect(oscGain);
+            oscGain.connect(audioContext.destination);
+
+            oscillator.start(time);
+            oscillator.stop(time + 0.045);
+        }
+
+        const now = audioContext.currentTime;
+
+        // Main button click
+        makeClick(now, 0.8, 850);
+
+        // Spring release sound
+        makeClick(now + 0.055, 0.35, 1250);
+
+    } catch (error) {
+        console.log("Audio unavailable", error);
+    }
+}
+
+function clickButton(type, button) {
+    counts[type]++;
+    total++;
+
+    document.getElementById("count-" + type).textContent =
+        counts[type];
+
+    document.getElementById("total").textContent = total;
+
+    playMechanicalClick();
+
+    button.classList.add("pressed");
+    setTimeout(() => button.classList.remove("pressed"), 110);
+
+    createSparkle(button);
+
+    if (type === "🌼") {
+        document.getElementById("message").textContent =
+            "a daisy just for you, Eise 🌼";
+    } else {
+        const randomMessage =
+            messages[Math.floor(Math.random() * messages.length)];
+
+        document.getElementById("message").textContent =
+            randomMessage;
+    }
+}
+
+function createSparkle(button) {
+    const rect = button.getBoundingClientRect();
+    const sparkle = document.createElement("div");
+
+    sparkle.className = "sparkle";
+    sparkle.textContent = ["✨", "🌼", "⭐", "♡"][
+        Math.floor(Math.random() * 4)
+    ];
+
+    sparkle.style.left =
+        rect.left + rect.width / 2 + "px";
+
+    sparkle.style.top =
+        rect.top + "px";
+
+    document.body.appendChild(sparkle);
+
+    setTimeout(() => sparkle.remove(), 800);
+}
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+
+    document.getElementById("soundToggle").textContent =
+        soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF";
+}
+
+function resetCounters() {
+    for (const key in counts) {
+        counts[key] = 0;
+        document.getElementById("count-" + key).textContent = 0;
+    }
+
+    total = 0;
+    document.getElementById("total").textContent = 0;
+
+    document.getElementById("message").textContent =
+        "fresh start, little sunshine 🌼";
+}
+</script>
+
+</body>
+</html>
