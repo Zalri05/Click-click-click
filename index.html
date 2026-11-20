@@ -161,6 +161,14 @@ h1 {
         0 7px 8px rgba(145, 109, 27, 0.15);
     cursor: pointer;
     transition: transform 0.08s, box-shadow 0.08s;
+
+    /* MULTI-TOUCH SUPPORT */
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-appearance: none;
+    appearance: none;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -318,27 +326,27 @@ h1 {
         <div class="buttons">
 
             <div class="key">
-                <button class="key-button" onclick="clickKey('E', this)">E</button>
+                <button class="key-button" onpointerdown="clickKey('E', this)">E</button>
                 <div class="counter" id="count-E">0</div>
             </div>
 
             <div class="key">
-                <button class="key-button" onclick="clickKey('I', this)">I</button>
+                <button class="key-button" onpointerdown="clickKey('I', this)">I</button>
                 <div class="counter" id="count-I">0</div>
             </div>
 
             <div class="key">
-                <button class="key-button" onclick="clickKey('S', this)">S</button>
+                <button class="key-button" onpointerdown="clickKey('S', this)">S</button>
                 <div class="counter" id="count-S">0</div>
             </div>
 
             <div class="key">
-                <button class="key-button" onclick="clickKey('E2', this)">E</button>
+                <button class="key-button" onpointerdown="clickKey('E2', this)">E</button>
                 <div class="counter" id="count-E2">0</div>
             </div>
 
             <div class="key">
-                <button class="key-button" onclick="clickKey('🌼', this)">🌼</button>
+                <button class="key-button" onpointerdown="clickKey('🌼', this)">🌼</button>
                 <div class="counter" id="count-🌼">0</div>
             </div>
 
@@ -395,6 +403,7 @@ h1 {
 </div>
 
 <script>
+
 /* COUNTERS */
 
 const counts = {
@@ -418,6 +427,8 @@ const messages = [
     "Don't forget to smile today!",
     "You're one of a kind ♡"
 ];
+
+/* CLICK BUTTON */
 
 function clickKey(key, button) {
 
@@ -697,7 +708,6 @@ function changeSwitch(type) {
     document.getElementById("switch-description").textContent =
         switchDescriptions[type];
 
-    // Play a sample of the selected switch
     playMechanicalSound();
 }
 
